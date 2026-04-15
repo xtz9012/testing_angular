@@ -48,7 +48,6 @@ def test_navigate_through_steps(stepper_page: Page):
     
     with allure.step("Verify stepper page is loaded"):
         assert page_obj.is_stepper_page_loaded()
-    stepper_page.wait_for_timeout(300)
     
     with allure.step("Verify next button is available for step navigation"):
         assert page_obj.is_next_button_visible()

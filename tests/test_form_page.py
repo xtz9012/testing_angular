@@ -39,8 +39,6 @@ def test_fill_form_with_valid_data(form_page: Page):
     
     with allure.step("Fill last name field with 'Doe'"):
         page_obj.fill_last_name("Doe")
-    
-    form_page.wait_for_timeout(300)
 
 
 @allure.description("Verify that the form can be submitted successfully")
@@ -52,11 +50,9 @@ def test_submit_form(form_page: Page):
     with allure.step("Fill form with test data"):
         page_obj.fill_first_name("Jane")
         page_obj.fill_last_name("Smith")
-    form_page.wait_for_timeout(300)
     
     with allure.step("Submit the form"):
         page_obj.submit_form()
-    form_page.wait_for_timeout(1000)
 
 
 @allure.description("Verify that individual form fields can be populated independently")

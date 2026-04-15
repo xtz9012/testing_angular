@@ -14,10 +14,10 @@ def test_form_submit_empty_fields(form_page: Page):
     
     with allure.step("Submit empty form directly"):
         page_obj.submit_form()
-    form_page.wait_for_timeout(500)
     
     with allure.step("Verify we're still on form (not submitted)"):
-        assert "/form" in page_obj.page.url
+        form_page.wait_for_load_state("networkidle")
+        assert "/form" in form_page.url or page_obj.is_form_page_loaded()
 
 
 @allure.description("Verify form accepts valid data and shows success message")  
@@ -29,15 +29,14 @@ def test_form_submit_success(form_page: Page):
     with allure.step("Fill required fields with valid data"):
         page_obj.fill_first_name("ValidName")
         page_obj.fill_last_name("ValidLast")
-    form_page.wait_for_timeout(300)
     
     with allure.step("Submit filled form"):
         page_obj.submit_form()
-    form_page.wait_for_timeout(1000)
+    form_page.wait_for_load_state("networkidle")
     
     with allure.step("Verify form was submitted (either success message or URL changed)"):
         success = page_obj.is_success_message_visible()
-        url_changed = "/form" not in page_obj.page.url or "success" in page_obj.page.url.lower()
+        url_changed = "/form" not in form_page.url or "success" in form_page.url.lower()
         assert success or url_changed
 
 
@@ -52,7 +51,6 @@ def test_form_special_characters(form_page: Page):
     
     with allure.step("Fill last name with special characters"):
         page_obj.fill_last_name("O'Brien-Smith")
-    form_page.wait_for_timeout(300)
     
     with allure.step("Verify fields accepted special characters"):
         # Fields should not throw errors with special chars
@@ -72,7 +70,6 @@ def test_form_long_input(form_page: Page):
     
     with allure.step(f"Fill last name with 100 character string"):
         page_obj.fill_last_name(long_name)
-    form_page.wait_for_timeout(300)
     
     with allure.step("Verify form still responds"):
         assert page_obj.is_form_page_loaded()

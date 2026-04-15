@@ -17,7 +17,6 @@ def test_stepper_previous_button_visible(stepper_page: Page):
             if page_obj.is_next_button_visible():
                 page_obj.click_next()
                 stepper_page.wait_for_load_state("networkidle")
-                stepper_page.wait_for_timeout(200)
     
     with allure.step("After navigating forward, verify we can interact with stepper"):
         # After clicking next, stepper should still be functional
@@ -36,7 +35,7 @@ def test_stepper_forward_and_backward_navigation(stepper_page: Page):
     with allure.step("Step 1 → Step 2: Click next button"):
         if page_obj.is_next_button_visible():
             page_obj.click_next()
-            stepper_page.wait_for_load_state("networkidle")
+        stepper_page.wait_for_load_state("networkidle")
     
     with allure.step("Verify we're not on step 1 anymore (could be step 2)"):
         assert page_obj.is_stepper_page_loaded()
@@ -44,7 +43,7 @@ def test_stepper_forward_and_backward_navigation(stepper_page: Page):
     with allure.step("Step 2 → Step 1: Click previous button"):
         if page_obj.is_previous_button_visible():
             page_obj.click_previous()
-            stepper_page.wait_for_load_state("networkidle")
+        stepper_page.wait_for_load_state("networkidle")
     
     with allure.step("Verify stepper is still functional"):
         assert page_obj.is_stepper_page_loaded()
@@ -65,7 +64,6 @@ def test_stepper_all_steps_accessible(stepper_page: Page):
     with allure.step("Navigate to step 1 directly"):
         try:
             page_obj.navigate_to_step(1)
-            stepper_page.wait_for_timeout(300)
         except:
             # Direct navigation might not be supported
             pass
@@ -75,12 +73,10 @@ def test_stepper_all_steps_accessible(stepper_page: Page):
         if page_obj.is_next_button_visible():
             page_obj.click_next()
             stepper_page.wait_for_load_state("networkidle")
-            stepper_page.wait_for_timeout(200)
     
     with allure.step("Navigate back to first step"):
         try:
             page_obj.navigate_to_step(1)
-            stepper_page.wait_for_timeout(300)
         except:
             # If direct navigation doesn't work, use previous button
             if page_obj.is_previous_button_visible():

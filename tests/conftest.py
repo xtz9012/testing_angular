@@ -2,10 +2,9 @@ import pytest
 import os
 from dotenv import load_dotenv
 from playwright.sync_api import Page, Browser
+from webui_utilities.helpers import FORM_URL, STEPPER_URL, WELCOME_URL, BASE_URL
 
 load_dotenv()
-
-BASE_URL = os.getenv("BASE_URL", "https://angular-qa-recruitment-app.netlify.app/")
 
 
 @pytest.fixture
@@ -20,7 +19,7 @@ def page(browser: Browser) -> Page:
 @pytest.fixture
 def form_page(page: Page) -> Page:
     """Navigate to form page and wait for load."""
-    page.goto("https://angular-qa-recruitment-app.netlify.app/form")
+    page.goto(FORM_URL)
     page.wait_for_load_state("networkidle")
     yield page
 
@@ -28,7 +27,7 @@ def form_page(page: Page) -> Page:
 @pytest.fixture
 def stepper_page(page: Page) -> Page:
     """Navigate to stepper page and wait for load."""
-    page.goto("https://angular-qa-recruitment-app.netlify.app/stepper")
+    page.goto(STEPPER_URL)
     page.wait_for_load_state("networkidle")
     yield page
 

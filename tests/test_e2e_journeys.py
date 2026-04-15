@@ -4,13 +4,14 @@ from webui_utilities.pages.welcome_page import WelcomePage
 from webui_utilities.pages.form_page import FormPage
 from webui_utilities.pages.main_page import MainPage
 from webui_utilities.pages.stepper_page import StepperPage
+from webui_utilities.helpers import navigate_to_welcome, navigate_to_form, navigate_to_stepper
 
 
 @allure.description("Complete E2E user journey: Welcome → Form → Stepper navigation")
 def test_complete_user_journey_navigation(page: Page):
     """Test complete user journey through all pages."""
-    page.goto("https://angular-qa-recruitment-app.netlify.app/")
-    page.wait_for_load_state("networkidle")
+    with allure.step("Step 1: Navigate to Welcome page"):
+        navigate_to_welcome(page)
     
     with allure.step("Step 1: Verify Welcome page loads"):
         welcome_page = WelcomePage(page)
@@ -28,11 +29,9 @@ def test_complete_user_journey_navigation(page: Page):
     with allure.step("Step 4: Fill form with test data"):
         form_page.fill_first_name("Journey")
         form_page.fill_last_name("Test")
-        page.wait_for_timeout(300)
     
     with allure.step("Step 5: Navigate to Main page (using navigation)"):
-        page.goto("https://angular-qa-recruitment-app.netlify.app/")
-        page.wait_for_load_state("networkidle")
+        navigate_to_welcome(page)
     
     with allure.step("Step 6: From Main page, navigate to Stepper"):
         main_page = MainPage(page)
@@ -50,8 +49,8 @@ def test_complete_user_journey_navigation(page: Page):
 @allure.description("User navigates between pages and comes back - state test")
 def test_navigate_between_pages_and_return(page: Page):
     """Test navigating between multiple pages and returning to original."""
-    page.goto("https://angular-qa-recruitment-app.netlify.app/form")
-    page.wait_for_load_state("networkidle")
+    with allure.step("Step 1: Navigate to Form page"):
+        navigate_to_form(page)
     
     with allure.step("Step 1: Start on Form page"):
         form_page = FormPage(page)
@@ -59,20 +58,17 @@ def test_navigate_between_pages_and_return(page: Page):
         form_initial_url = page.url
     
     with allure.step("Step 2: Navigate to Home/Welcome"):
-        page.goto("https://angular-qa-recruitment-app.netlify.app/")
-        page.wait_for_load_state("networkidle")
+        navigate_to_welcome(page)
         welcome_page = WelcomePage(page)
         assert welcome_page.is_welcome_page_loaded()
     
     with allure.step("Step 3: Navigate to Stepper"):
-        page.goto("https://angular-qa-recruitment-app.netlify.app/stepper")
-        page.wait_for_load_state("networkidle")
+        navigate_to_stepper(page)
         stepper_page = StepperPage(page)
         assert stepper_page.is_stepper_page_loaded()
     
     with allure.step("Step 4: Return to Form page"):
-        page.goto(form_initial_url)
-        page.wait_for_load_state("networkidle")
+        navigate_to_form(page)
         form_page_returned = FormPage(page)
         assert form_page_returned.is_form_page_loaded()
         
@@ -83,8 +79,8 @@ def test_navigate_between_pages_and_return(page: Page):
 @allure.description("Fill form, verify data persists, then submit")
 def test_form_fill_and_submit_complete_flow(page: Page):
     """Test complete form flow: fill → verify → submit."""
-    page.goto("https://angular-qa-recruitment-app.netlify.app/form")
-    page.wait_for_load_state("networkidle")
+    with allure.step("Navigate to Form page"):
+        navigate_to_form(page)
     
     with allure.step("Initialize form page"):
         form_page = FormPage(page)
@@ -95,7 +91,6 @@ def test_form_fill_and_submit_complete_flow(page: Page):
         test_last_name = "TestLast"
         form_page.fill_first_name(test_first_name)
         form_page.fill_last_name(test_last_name)
-        page.wait_for_timeout(500)
     
     with allure.step("Verify form title is still visible"):
         title = form_page.get_form_title()
@@ -103,7 +98,6 @@ def test_form_fill_and_submit_complete_flow(page: Page):
     
     with allure.step("Submit the form"):
         form_page.submit_form()
-        page.wait_for_timeout(1500)
     
     with allure.step("Verify submission succeeded"):
         # Either success message or URL changed

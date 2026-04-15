@@ -9,7 +9,7 @@ class BasePage:
     def __init__(self, page: Page):
         self.page = page
 
-    def wait_for_element(self, selector: str, timeout: int = 5000):
+    def wait_for_element(self, selector: str, timeout: int = 3000):
         """Wait for an element to be visible."""
         with allure.step(f"Wait for element with selector: {selector}"):
             self.page.wait_for_selector(selector, timeout=timeout)
@@ -32,7 +32,7 @@ class BasePage:
     def is_element_visible(self, selector: str) -> bool:
         """Check if element is visible."""
         try:
-            self.page.wait_for_selector(selector, timeout=2000)
+            self.page.wait_for_selector(selector, timeout=1000)
             return True
         except:
             return False
