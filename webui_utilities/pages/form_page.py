@@ -1,3 +1,4 @@
+import allure
 from .base_page import BasePage
 
 
@@ -18,23 +19,28 @@ class FormPage(BasePage):
 
     def is_form_page_loaded(self) -> bool:
         """Verify form page is loaded."""
-        return self.is_element_visible(self.FORM_TITLE)
+        with allure.step("Verify Hero Form page is loaded"):
+            return self.is_element_visible(self.FORM_TITLE)
 
     def get_form_title(self) -> str:
         """Get form title."""
-        return self.get_text(self.FORM_TITLE)
+        with allure.step("Get form title"):
+            return self.get_text(self.FORM_TITLE)
 
     def fill_first_name(self, name: str):
         """Fill first name field."""
-        self.fill(self.FIRST_NAME_INPUT, name)
+        with allure.step(f"Fill first name with: {name}"):
+            self.fill(self.FIRST_NAME_INPUT, name)
 
     def fill_last_name(self, name: str):
         """Fill last name/alter ego field."""
-        self.fill(self.LAST_NAME_INPUT, name)
+        with allure.step(f"Fill last name with: {name}"):
+            self.fill(self.LAST_NAME_INPUT, name)
 
     def select_power(self, power: str):
         """Select a power from dropdown."""
-        self.select_option(self.POWER_SELECT, power)
+        with allure.step(f"Select power: {power}"):
+            self.select_option(self.POWER_SELECT, power)
 
     def fill_email(self, email: str):
         """Fill email field if present."""
@@ -52,7 +58,8 @@ class FormPage(BasePage):
 
     def submit_form(self):
         """Submit the form."""
-        self.click(self.SUBMIT_BUTTON)
+        with allure.step("Submit the form"):
+            self.click(self.SUBMIT_BUTTON)
 
     def click_new_hero(self):
         """Click new hero button."""
