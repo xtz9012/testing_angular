@@ -1,5 +1,0 @@
-allure-pytest
-pytest
-pytest-asyncio
-playwright
-python-dotenv
